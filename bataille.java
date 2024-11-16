@@ -117,6 +117,7 @@ public class bataille {
                     gridPlay[l + j][c] = i + 1;
                 }
             }
+            clear();
         }
     }
 
@@ -193,13 +194,14 @@ public class bataille {
             grille2[l][c] = 7;
             System.out.println("À l’eau !");
         }
-        System.out.println();
     }
 
     public static int[] playComp() {
         int[] r = new int[2];
-        r[0] = randRange(0,9);
-        r[1] = randRange(0,9);
+        do {
+            r[0] = randRange(0,9);
+            r[1] = randRange(0,9);
+        } while (gridCompPlayed[r[0]][r[1]] != 0);
         return r;
     }
     
@@ -212,36 +214,14 @@ public class bataille {
         return true;
     }
 
-    public final static void clearConsole()
-    {
-        try
-        {
-            final String os = System.getProperty("os.name");
-            
-            if (os.contains("Windows"))
-            {
-                Runtime.getRuntime().exec("cls");
-            }
-            else
-            {
-                Runtime.getRuntime().exec("clear");
-            }
-        }
-        catch (final Exception e)
-        {
-            System.out.println(e);
-        }
-    }
-
     public static void play() {
         initGridComp();
         initGridPlay();
         hasStarted = true;
         while (!isOver(gridComp) && !isOver(gridPlay)) {
-            clear();
             // prtinGrid(gridComp);
             int[] comp = playComp();
-            System.out.print("\nOrdinateur : "+lettres.charAt(comp[1])+","+(comp[0]+1)+"; ");
+            System.out.print("Ordinateur : "+lettres.charAt(comp[1])+","+(comp[0]+1)+"; ");
             oneMove(gridPlay, comp[0], comp[1]);
             if (!isOver(gridPlay)) {
                 prtinGrid(gridPlay);
@@ -261,7 +241,8 @@ public class bataille {
                     System.out.print("Donnez le nombre : ");
                     l = readInt() - 1;
                 } while (l < 0 || l > 9);
-                System.out.print("\nJoueur : "+lettres.charAt(c)+","+(l+1)+"; ");
+                clear();
+                System.out.print("Joueur : "+lettres.charAt(c)+","+(l+1)+"; ");
                 oneMove(gridComp, l, c);
                 if (isOver(gridComp)) {
                     System.out.println("Le joueur a gagné !");
